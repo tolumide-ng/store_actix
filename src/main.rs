@@ -1,3 +1,6 @@
-fn main() {
-    println!("Hello, world!");
+use store;
+
+
+fn main() {    
+    store::start();
 }
