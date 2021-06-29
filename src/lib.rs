@@ -2,8 +2,8 @@ use actix_web::{get, http, web, App, HttpRequest, HttpResponse, HttpServer};
 use actix::prelude::{Addr, SyncArbiter};
 use std::env;
 
-// #[macro_use]
-// extern crate diesel;
+#[macro_use]
+extern crate diesel;
 
 
 
