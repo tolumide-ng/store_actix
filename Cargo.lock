@@ -1658,6 +1658,7 @@ dependencies = [
  "diesel",
  "dotenv",
  "jsonwebtoken",
+ "num_cpus",
  "serde",
  "serde_derive",
  "serde_json",

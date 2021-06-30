@@ -1,5 +1,6 @@
 use actix::prelude::{Actor, SyncContext};
 use diesel::{pg::PgConnection, r2d2::{self, ConnectionManager, Pool, PooledConnection}};
+use crate::prelude::Result;
 
 pub type Conn = PgConnection;
 pub type PgPool = Pool<ConnectionManager<Conn>>;
