@@ -4,11 +4,17 @@ use std::env;
 
 #[macro_use]
 extern crate diesel;
+#[macro_use]
+extern crate serde_derive;
+extern crate jsonwebtoken as jwt;
+
 
 
 
 pub mod middlewares;
 pub mod db;
+pub mod errors;
+pub mod prelude;
 
 #[get("/")]
 async fn index(req: HttpRequest) -> &'static str {
