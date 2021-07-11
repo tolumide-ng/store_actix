@@ -3,7 +3,7 @@ use actix::prelude::{Addr, SyncArbiter};
 use dotenv::dotenv;
 use std::env;
 use actix_cors::Cors;
-use crate::db::prelude::{DbExecutor, new_pool};
+use crate::db::index::{DbExecutor, new_pool};
 
 
 
@@ -19,7 +19,7 @@ extern crate dotenv;
 pub mod middlewares;
 pub mod db;
 pub mod errors;
-pub mod prelude;
+pub mod index;
 pub mod routes;
 
 

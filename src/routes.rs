@@ -1,2 +1,2 @@
-pub mod prelude;
+pub mod index;
 pub mod users;
