@@ -1,5 +1,5 @@
 use actix::prelude::{Actor, SyncContext};
-use diesel::{pg::PgConnection, r2d2::{self, ConnectionManager, Pool, PooledConnection}};
+use diesel::{pg::PgConnection, Connection. r2d2::{self, ConnectionManager, Pool, PooledConnection}};
 use crate::prelude::Result;
 
 pub type Conn = PgConnection;
@@ -14,6 +14,6 @@ impl Actor for DbExecutor {
 
 pub fn new_pool<S: Into<String>>(database_url: S) -> Result<PgPool> {
     let manager = ConnectionManager::<Conn>::new(database_url.into());
-    let pool = r2d2::Pool::builder().build(manager)?;
+    let pool = r2d2::Pool::builder().build(manager).expect("failed to create manager");
     Ok(pool)
 }

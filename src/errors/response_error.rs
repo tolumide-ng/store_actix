@@ -5,7 +5,7 @@ use diesel::{r2d2::PoolError, result::{DatabaseErrorKind, Error as DieselError}}
 use serde_json::{Map as JsonMap, Value as JsonValue, json};
 use validator::{Validate, ValidationError, ValidationErrors};
 use std::convert::From;
-
+use std::fmt::Display;
 
 #[derive(Debug)]
 pub enum Error {
@@ -23,6 +23,14 @@ pub enum Error {
 
     // 500
     InternalServerError,
+}
+
+impl std::fmt::Display for Error {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // write!(f, "({}, {})", self.x, self.y)
+        println!("WHAT THE ERROR ITSELF IS!!!!!!!!!!! {:#?}", self);
+        write!(f, "{:#?}", self)
+    }
 }
 
 
