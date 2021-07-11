@@ -1,7 +1,7 @@
 use actix_web::{error::ResponseError, http::StatusCode, HttpResponse};
 use actix::MailboxError;
 use diesel::{r2d2::PoolError, result::{DatabaseErrorKind, Error as DieselError}};
-use jwt::errors::{Error as JwtError, ErrorKind as JwtErrorKind};
+// use jwt::errors::{Error as JwtError, ErrorKind as JwtErrorKind};
 use serde_json::{Map as JsonMap, Value as JsonValue, json};
 use validator::{Validate, ValidationError, ValidationErrors};
 use std::convert::From;
@@ -47,25 +47,6 @@ impl From<MailboxError> for Error {
 }
 
 
-
-impl From<JwtError> for Error {
-    fn from(error: JwtError) -> Self {
-        match error.kind() {
-            JwtErrorKind::InvalidToken => Error::Unauthorized(json!({
-                "error": "Invalid Jwt Token"
-            })),
-            JwtErrorKind::InvalidIssuer => Error::Unauthorized(json!({
-                "error": "Issuer is invalid",
-            })),
-            _ => Error::Unauthorized(json!({
-                "error": "An issue was found with the provided token",
-            }))
-        }
-    }
-}
-
-
-
 impl From<DieselError> for Error {
     fn from(error: DieselError) -> Self {
         match error {
@@ -87,6 +68,26 @@ impl From<DieselError> for Error {
         }
     }
 }
+
+
+
+// impl From<JwtError> for Error {
+//     fn from(error: JwtError) -> Self {
+//         match error.kind() {
+//             JwtErrorKind::InvalidToken => Error::Unauthorized(json!({
+//                 "error": "Invalid Jwt Token"
+//             })),
+//             JwtErrorKind::InvalidIssuer => Error::Unauthorized(json!({
+//                 "error": "Issuer is invalid",
+//             })),
+//             _ => Error::Unauthorized(json!({
+//                 "error": "An issue was found with the provided token",
+//             }))
+//         }
+//     }
+// }
+
+
 
 
 impl From<PoolError> for Error {

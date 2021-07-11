@@ -8,7 +8,7 @@ use crate::db::prelude::{DbExecutor, new_pool};
 extern crate diesel;
 #[macro_use]
 extern crate serde_derive;
-extern crate jsonwebtoken as jwt;
+// extern crate jsonwebtoken as jwt;
 
 
 pub mod middlewares;
