@@ -1,12 +1,11 @@
-use crate::db::index::{new_pool, DbExecutor};
+use crate::db::index::{create_connection, DbExecutor};
 use actix::prelude::{Addr, SyncArbiter};
 use actix_cors::Cors;
 use actix_web::{
-    get,
     http::header::{AUTHORIZATION, CONTENT_TYPE},
     middleware, web,
     web::Data,
-    App, HttpRequest, HttpResponse, HttpServer, Responder,
+    App, HttpRequest, HttpServer, Responder,
 };
 use dotenv::dotenv;
 use std::env;
@@ -43,15 +42,14 @@ pub async fn start() -> std::io::Result<()> {
 
     let database_url =
         env::var("DATABASE_URL").expect("Environment Varibale DATABASE_URL is required");
-    let database_pool = new_pool(database_url).expect("Failed to create pool");
+    // let database_pool = new_pool(database_url).expect("Failed to create pool");
+
+    let db_pool = create_connection(String::from(database_url)).unwrap();
+
     // let database_address = SyncArbiter::start(num_cpus::get(), move || DbExecutor(database_pool.clone()));
-    // let database_address =
-    //     SyncArbiter::start(num_cpus::get(), move || DbExecutor(database_pool.clone()));
 
     HttpServer::new(move || {
-        // let state = AppState {
-        //     db: database_address.clone(),
-        // };
+        println!("MOVING UP NOW!!!!!!!!");
 
         let cors = match client_url {
             Some(ref origin) => Cors::default()
@@ -65,13 +63,9 @@ pub async fn start() -> std::io::Result<()> {
                 .max_age(3600),
         };
 
-        // App::new::data(database_pool.clone()).route("/", web::post().to(routes::users::register))
-        App::new().data(database_pool.clone()).service(
-            web::scope("/api/v1")
-                // .route("/{name}", web::get().to(routes::users::register))
-                .service(web::resource("/signup").to(routes::users::register)),
+        App::new().data(db_pool.clone()).service(
+            web::scope("/api/v1").service(web::resource("/signup").to(routes::users::register)),
         )
-        // .service(web::resource("/api"))
     })
     .bind(("127.0.0.1", 8080))?
     .run()
