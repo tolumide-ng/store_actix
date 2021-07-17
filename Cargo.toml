@@ -17,3 +17,5 @@ actix-cors = "0.5.4"
 actix-rt = "2.2.0"
 diesel = { version = "1.4.7", features = ["postgres", "chrono", "uuid", "chrono", "r2d2", "uuidv07", "serde_json"] }
 dotenv = "0.15.0"
+uuid = "0.8.2"
+chrono = "0.4"

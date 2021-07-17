@@ -49,8 +49,6 @@ pub async fn start() -> std::io::Result<()> {
     // let database_address = SyncArbiter::start(num_cpus::get(), move || DbExecutor(database_pool.clone()));
 
     HttpServer::new(move || {
-        println!("MOVING UP NOW!!!!!!!!");
-
         let cors = match client_url {
             Some(ref origin) => Cors::default()
                 .allowed_origin(origin)

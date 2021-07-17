@@ -1660,12 +1660,14 @@ dependencies = [
  "actix-cors",
  "actix-rt 2.2.0",
  "actix-web",
+ "chrono",
  "diesel",
  "dotenv",
  "num_cpus",
  "serde",
  "serde_derive",
  "serde_json",
+ "uuid 0.8.2",
  "validator",
 ]
 

@@ -27,6 +27,7 @@ pub fn new_pool<S: Into<String>>(database_url: S) -> Result<PgPool> {
 pub fn create_connection(database_url: String) -> Result<PgPool> {
     let manager = ConnectionManager::<Conn>::new(database_url);
     let pool = r2d2::Pool::builder()
+        .max_size(15)
         .build(manager)
         .expect("Failed to create pool");
 
