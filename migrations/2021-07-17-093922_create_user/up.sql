@@ -6,7 +6,7 @@ CREATE TABLE user_info (
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
     email VARCHAR NOT NULL,
-    password VARCHAR NOT NULL,
+    hash VARCHAR NOT NULL,
     user_type UUID NOT NULL,
     FOREIGN KEY (user_type) REFERENCES user_role(id) ON UPDATE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,

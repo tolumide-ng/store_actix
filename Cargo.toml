@@ -17,7 +17,9 @@ actix-cors = "0.5.4"
 actix-rt = "2.2.0"
 diesel = { version = "1.4.7", features = ["postgres", "chrono", "uuid", "chrono", "r2d2", "uuidv07", "serde_json"] }
 dotenv = "0.15.0"
-uuid = "0.8.2"
-chrono = "0.4"
+uuid = { version = "0.8.2", features = ["serde", "v4"] }
+chrono = { version = "0.4", features = ["serde"] }
 diesel_migrations = "1.4.0"
 cargo-watch = "7.8.1"
+pbkdf2 = { version = "0.7", default-features = false }
+rand_core = { version = "0.6", features = ["std"] }

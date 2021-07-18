@@ -4,7 +4,7 @@ table! {
         first_name -> Text,
         last_name -> Text,
         email -> Varchar,
-        password -> Varchar,
+        hash -> Varchar,
         user_type -> Uuid,
         created_at -> Timestamp,
         updated_at -> Timestamp,

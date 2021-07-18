@@ -1,4 +1,4 @@
-use crate::db::index::{get_pool, DbExecutor};
+use crate::db::index::get_pool;
 use actix::prelude::{Addr, SyncArbiter};
 use actix_cors::Cors;
 use actix_web::{
@@ -20,22 +20,17 @@ extern crate diesel_migrations;
 // extern crate jsonwebtoken as jwt;
 extern crate dotenv;
 
+pub mod actors;
 pub mod db;
 pub mod errors;
+pub mod helpers;
 pub mod index;
 pub mod middlewares;
+pub mod models;
 pub mod routes;
-
-// pub struct AppState {
-//     pub db: Addr<DbExecutor>,
-// }
+pub mod schema;
 
 // use actix_web::{web, App, HttpRequest, HttpServer, Responder};
-
-async fn greet(req: HttpRequest) -> impl Responder {
-    let name = req.match_info().get("name").unwrap_or("World");
-    format!("Hello {}!", &name)
-}
 
 #[actix_web::main]
 pub async fn start() -> std::io::Result<()> {
@@ -49,7 +44,7 @@ pub async fn start() -> std::io::Result<()> {
 
     let db_pool = get_pool(String::from(database_url)).unwrap();
 
-    // let database_address = SyncArbiter::start(num_cpus::get(), move || DbExecutor(database_pool.clone()));
+    // let database_address = SyncArbiter::start(num_cpus::get(), move || DbActor(database_pool.clone()));
 
     HttpServer::new(move || {
         let cors = match client_url {
