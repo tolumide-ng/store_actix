@@ -1,0 +1,43 @@
+version: "3.4"
+services:
+  store_auth:
+    container_name: "store_auth"
+    build:
+      context: .
+      dockerfile: "Dockerfile"
+      cache_from:
+        - rust:latest
+    links:
+      - "postgres"
+    depends_on:
+      - "postgres"
+    environment:
+      - PG_URL=${DATABASE_URL}
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - store_auth
+    tty: true
+    ports:
+      - "4000:4000"
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PWD}
+      PASSWORD: ${PWD}
+    networks:
+      - store_auth
+    ports:
+      - "5432:5432"
+
+networks:
+  store_auth:
+    driver: bridge
+
+volumes:
+  pgdata:
+    driver: local
