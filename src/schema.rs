@@ -4,7 +4,7 @@ table! {
         first_name -> Text,
         last_name -> Text,
         email -> Varchar,
-        hash -> Varchar,
+        password -> Varchar,
         user_type -> Uuid,
         created_at -> Timestamp,
         updated_at -> Timestamp,
@@ -23,7 +23,4 @@ table! {
 
 joinable!(user_info -> user_role (user_type));
 
-allow_tables_to_appear_in_same_query!(
-    user_info,
-    user_role,
-);
+allow_tables_to_appear_in_same_query!(user_info, user_role,);

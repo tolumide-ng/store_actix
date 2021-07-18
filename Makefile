@@ -6,3 +6,6 @@ watch-build:
 
 watch-done:
 	docker compose -f docker-compose.test.yml down
+
+pg-test:
+	docker-compose -f docker-compose.test.yml exec postgres psql -U docker

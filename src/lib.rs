@@ -1,4 +1,4 @@
-use crate::db::index::{create_connection, DbExecutor};
+use crate::db::index::{get_pool, DbExecutor};
 use actix::prelude::{Addr, SyncArbiter};
 use actix_cors::Cors;
 use actix_web::{
@@ -14,6 +14,9 @@ use std::env;
 extern crate diesel;
 #[macro_use]
 extern crate serde_derive;
+#[macro_use]
+extern crate diesel_migrations;
+
 // extern crate jsonwebtoken as jwt;
 extern crate dotenv;
 
@@ -23,9 +26,9 @@ pub mod index;
 pub mod middlewares;
 pub mod routes;
 
-pub struct AppState {
-    pub db: Addr<DbExecutor>,
-}
+// pub struct AppState {
+//     pub db: Addr<DbExecutor>,
+// }
 
 // use actix_web::{web, App, HttpRequest, HttpServer, Responder};
 
@@ -44,7 +47,7 @@ pub async fn start() -> std::io::Result<()> {
         env::var("DATABASE_URL").expect("Environment Varibale DATABASE_URL is required");
     // let database_pool = new_pool(database_url).expect("Failed to create pool");
 
-    let db_pool = create_connection(String::from(database_url)).unwrap();
+    let db_pool = get_pool(String::from(database_url)).unwrap();
 
     // let database_address = SyncArbiter::start(num_cpus::get(), move || DbExecutor(database_pool.clone()));
 
