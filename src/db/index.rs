@@ -36,3 +36,4 @@ pub fn run_migrations(db_url: &str) {
 impl Actor for DbActor {
     type Context = SyncContext<Self>;
 }
+

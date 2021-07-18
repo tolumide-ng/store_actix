@@ -8,7 +8,7 @@ pub struct AppState {}
 // impl
 
 #[derive(Queryable, Deserialize, Debug, Serialize, Clone)]
-pub struct UserInfo {
+pub struct User {
     pub id: uuid::Uuid,
     pub first_name: String,
     pub last_name: String,
@@ -29,11 +29,11 @@ pub struct NewUser {
 }
 
 #[derive(Serialize)]
-pub struct UserAuth<'a> {
-    first_name: &'a str,
-    last_name: &'a str,
-    email: &'a str,
-    token: &'a str,
+pub struct UserAuth {
+    first_name: String,
+    last_name: String,
+    email: String,
+    token: String,
 }
 
 #[derive(Serialize, Queryable, Deserialize, Debug)]
@@ -42,6 +42,6 @@ pub struct UserToken<'a> {
 }
 
 #[derive(Serialize, Queryable, Deserialize, Debug)]
-pub struct ResetPassword<'a> {
-    message: &'a str,
+pub struct UserMessage {
+    message: String,
 }
