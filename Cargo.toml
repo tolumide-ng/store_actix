@@ -11,13 +11,13 @@ validator = { version = "0.12", features = ["derive"] }
 num_cpus = "1.11.1"
 serde_derive = "1"
 serde = "1"
-actix = "0.12.0"
-actix-web = "3"
+actix = "0.10.0"
+actix-web = "3.3.2"
 actix-cors = "0.5.4"
 diesel = { version = "1.4.7", features = ["postgres", "chrono", "uuid", "r2d2", "serde_json"] }
 dotenv = "0.15.0"
 uuid = { version = "0.6.5", features = ["serde", "v4"] }
-chrono = { version = "0.4", features = ["serde"] }
+chrono = { version = "0.4.19", features = ["serde"] }
 diesel_migrations = "1.4.0"
 cargo-watch = "7.8.1"
 pbkdf2 = "0.7"
