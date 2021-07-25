@@ -52,15 +52,19 @@ impl Handler<CreateUser> for DbActor {
         };
 
 
-        diesel::insert_into(user_info).values(new_user).get_result::<User>(&conn)?;
-        // match diesel::insert_into(user_info).values(new_user).get_result::<User>(conn) {}
+        // let create_user = diesel::insert_into(user_info).values(new_user).execute(&conn);
+        let create_user = diesel::insert_into(user_info).values(new_user).get_result::<User>(&conn);
 
 
+        match create_user {
+            Ok(user) => {
+                let message = format!("Please check your email {} for information on how to proceed", user.email);
 
-        // change the response type to one that implements a trait called response generator
+                Ok(UserMessage {message})
+            }
+            Err(e) => Err(e)
+        }
 
-        Ok(UserMessage {
-            message: String::from("Please check your email for information on how to proceed"),
-        })
+        
     }
 }
