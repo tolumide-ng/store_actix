@@ -3,7 +3,7 @@ extern crate actix;
 #[macro_use]
 extern crate diesel;
 
-#[macro_use]
+// #[macro_use]
 extern crate serde_derive;
 
 #[macro_use]
@@ -13,15 +13,16 @@ extern crate diesel_migrations;
 extern crate dotenv;
 
 
-use crate::db::prelude::get_pool;
+use crate::db::prelude::{AppState, get_pool};
+use actix::SyncArbiter;
 // use actix::prelude::{Addr, SyncArbiter};
 use actix_cors::Cors;
 use actix_web::{
     http::header::{AUTHORIZATION, CONTENT_TYPE},
-    middleware, web,
-    web::Data,
-    App, HttpRequest, HttpServer, Responder,
+    middleware, App,
+    web, HttpServer,
 };
+use db::prelude::{DbActor, run_migrations};
 use dotenv::dotenv;
 use std::env;
 
@@ -47,13 +48,17 @@ pub async fn start() -> std::io::Result<()> {
 
     dotenv().ok();
 
-    let database_url =
-        env::var("DATABASE_URL").expect("Environment Varibale DATABASE_URL is required");
-    // let database_pool = new_pool(database_url).expect("Failed to create pool");
-
-    let db_pool = get_pool(String::from(database_url)).unwrap();
 
     // let database_address = SyncArbiter::start(num_cpus::get(), move || DbActor(database_pool.clone()));
+
+    let db_url = env::var("DATABASE_URL").expect("db_url is required");
+    run_migrations(&db_url);
+    // let pool = get_pool(db_url).expect("msg");
+
+    let db_addr = match get_pool(db_url) {
+        Ok(pool) => SyncArbiter::start(num_cpus::get(), move || DbActor(pool.clone())),
+        Err(_) => panic!("Error creating db connection"),
+    };
 
     HttpServer::new(move || {
         let cors = match client_url {
@@ -68,9 +73,13 @@ pub async fn start() -> std::io::Result<()> {
                 .max_age(3600),
         };
 
-        App::new().service(
-            web::scope("/api/v1").service(web::resource("/signup").to(routes::users::register)),
-        )
+        // App::new().service(
+        //     web::scope("/api/v1").service(web::resource("/signup").to(routes::users::register)),
+        // )
+
+        App::new().service(controllers::users::register).data(AppState {
+            db: db_addr.clone()
+        })
     })
     .bind(("127.0.0.1", 8080))?
     .run()

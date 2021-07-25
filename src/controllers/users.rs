@@ -7,7 +7,7 @@ use crate::actors::users::{CreateUser};
 
 
 #[post("/register")]
-async fn create_user(user: Json<UserData>, state: Data<AppState>) -> impl Responder {
+async fn register(user: Json<UserData>, state: Data<AppState>) -> impl Responder {
     let db = state.as_ref().db.clone();
     let user = user.into_inner();
 

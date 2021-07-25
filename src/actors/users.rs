@@ -2,13 +2,9 @@ use actix::{Actor, Handler, Message, SyncContext};
 // use actix_derive::{Message, MessageResponse};
 use crate::db::prelude::DbActor;
 use crate::diesel::prelude::*;
-use crate::helpers::hash::generate_hash;
 use crate::models::users::{NewUser, User, UserAuth, UserMessage, UserToken};
 use crate::schema::user_info::dsl::{user_info};
 use crate::schema::user_role::dsl::{user_role};
-// use crate::schema::{user_info, user_role};
-// use actix::prelude::*;
-// use crate::schema::user_info::dsl::{user_info};
 
 #[derive(Message)]
 #[rtype(result = "QueryResult<UserMessage>")]
