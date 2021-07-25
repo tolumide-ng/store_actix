@@ -35,7 +35,6 @@ pub mod models;
 pub mod routes;
 pub mod schema;
 pub mod controllers;
-pub mod l_actors;
 
 // use actix_web::{web, App, HttpRequest, HttpServer, Responder};
 

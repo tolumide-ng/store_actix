@@ -2,17 +2,18 @@ use crate::schema::user_info;
 use chrono;
 use serde::{Deserialize, Serialize};
 use uuid;
+use crate::actors::users::CreateUser;
 
 
 
-#[derive(Queryable, Deserialize, Debug, Serialize, Clone)]
+#[derive(Queryable, Debug)]
 pub struct User {
     pub id: uuid::Uuid,
     pub first_name: String,
     pub last_name: String,
     pub email: String,
-    pub password: String,
-    pub user_type: String,
+    pub hash: String,
+    pub user_type: Option<uuid::Uuid>,
     pub created_at: chrono::DateTime<chrono::Utc>,
     pub updated_at: chrono::DateTime<chrono::Utc>,
 }
@@ -26,7 +27,7 @@ pub struct NewUser {
     pub hash: String,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Queryable)]
 pub struct UserAuth {
     pub first_name: String,
     pub last_name: String,
@@ -51,4 +52,16 @@ pub struct UserData {
     pub last_name: String,
     pub email: String,
     pub password: String
+}
+
+
+impl NewUser {
+    pub fn new(user: CreateUser) -> Self {
+        NewUser {
+            first_name: user.first_name,
+            hash: user.hash,
+            last_name: user.last_name,
+            email: user.email
+        }
+    }
 }

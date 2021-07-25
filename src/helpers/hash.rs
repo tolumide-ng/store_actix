@@ -1,8 +1,10 @@
 use pbkdf2::{
-    password_hash::{PasswordHash, PasswordHasher, SaltString},
+    password_hash::{PasswordHash, PasswordHasher, SaltString, PasswordVerifier},
     Pbkdf2,
 };
 use rand_core::OsRng;
+
+
 
 pub fn generate_hash<'a>(password: &'a str) -> String {
     let pass = password.as_bytes();
@@ -18,6 +20,5 @@ pub fn verify_hash<'a>(password: &'a str, hash: String) -> bool {
     let parsed_hash = PasswordHash::new(&hash).unwrap();
     let pass = password.as_bytes();
 
-    match Pbkdf2.verify_password(pass, &parsed_hash).is_ok()
+    Pbkdf2.verify_password(pass, &parsed_hash).is_ok()
 }
-

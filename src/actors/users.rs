@@ -4,9 +4,11 @@ use crate::db::prelude::DbActor;
 use crate::diesel::prelude::*;
 use crate::helpers::hash::generate_hash;
 use crate::models::users::{NewUser, User, UserAuth, UserMessage, UserToken};
-use crate::schema::{user_info, user_role};
-use actix::prelude::*;
-use uuid::Uuid;
+use crate::schema::user_info::dsl::{user_info};
+use crate::schema::user_role::dsl::{user_role};
+// use crate::schema::{user_info, user_role};
+// use actix::prelude::*;
+// use crate::schema::user_info::dsl::{user_info};
 
 #[derive(Message)]
 #[rtype(result = "QueryResult<UserMessage>")]
@@ -14,7 +16,7 @@ pub struct CreateUser {
     pub first_name: String,
     pub last_name: String,
     pub email: String,
-    pub password: String,
+    pub hash: String,
 }
 
 #[derive(Message)]
@@ -38,27 +40,21 @@ pub struct ResetPassword<'a> {
 
 impl Handler<CreateUser> for DbActor {
     type Result = QueryResult<UserMessage>;
-
+    
     fn handle(&mut self, msg: CreateUser, ctx: &mut Self::Context) -> Self::Result {
+        
+        // let conn = &self.0.get()?;`
+        let new_user: NewUser = NewUser::new(msg);
         let conn = self.0.get().as_ref().expect("Unable to get connection");
 
-        let CreateUser {
-            first_name,
-            last_name,
-            email,
-            password,
-        } = msg;
+        // let basic_user = user_role.filter()
+        // let stored_user: User = users.filter(email.eq(msg.email)).fi
 
-        // use bcyrpt to hash password here
+        // diesel::insert_into(user_info).values(new_user).execute(conn)?;
+        diesel::insert_into(user_info).values(new_user).get_result::<User>(conn)?;
+        // match diesel::insert_into(user_info).values(new_user).get_result::<User>(conn) {}
 
-        let new_user = NewUser {
-            first_name,
-            last_name,
-            email,
-            hash: generate_hash(password.as_str()),
-        };
 
-        // make call to db to cache user her
 
         // change the response type to one that implements a trait called response generator
 

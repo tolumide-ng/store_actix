@@ -2,9 +2,9 @@
 CREATE TABLE user_role (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     auth_type VARCHAR NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT 't',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    active BOOLEAN NOT NULL DEFAULT 't'
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 SELECT diesel_manage_updated_at('user_role');
