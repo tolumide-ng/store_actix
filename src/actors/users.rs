@@ -45,13 +45,14 @@ impl Handler<CreateUser> for DbActor {
         
         // let conn = &self.0.get()?;`
         let new_user: NewUser = NewUser::new(msg);
-        let conn = self.0.get().as_ref().expect("Unable to get connection");
+        let conn = if let Ok(connection) = self.0.get() {
+            connection
+        } else {
+            panic!("Error getting connection, please try later")
+        };
 
-        // let basic_user = user_role.filter()
-        // let stored_user: User = users.filter(email.eq(msg.email)).fi
 
-        // diesel::insert_into(user_info).values(new_user).execute(conn)?;
-        diesel::insert_into(user_info).values(new_user).get_result::<User>(conn)?;
+        diesel::insert_into(user_info).values(new_user).get_result::<User>(&conn)?;
         // match diesel::insert_into(user_info).values(new_user).get_result::<User>(conn) {}
 
 
