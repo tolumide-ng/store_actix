@@ -20,3 +20,4 @@ pub fn verify_hash<'a>(password: &'a str, hash: String) -> bool {
 
     match Pbkdf2.verify_password(pass, &parsed_hash).is_ok()
 }
+

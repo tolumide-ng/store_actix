@@ -1,20 +1,17 @@
-use crate::index::Result;
+use crate::helpers::prelude::Result;
 use actix::prelude::{Actor, SyncContext};
 use diesel::{
     pg::PgConnection,
     r2d2::{self, ConnectionManager, Pool, PooledConnection},
     Connection,
 };
+use crate::actix::Addr;
 
 pub type Conn = PgConnection;
 pub type PgPool = Pool<ConnectionManager<Conn>>;
 pub type PooledConn = PooledConnection<ConnectionManager<Conn>>;
 
 pub struct DbActor(pub PgPool);
-
-// impl Actor for DbExecutor {
-//     type Context = SyncContext<Self>;
-// }
 
 pub fn get_pool(db_url: String) -> Result<PgPool> {
     let manager = ConnectionManager::<Conn>::new(db_url);
@@ -37,3 +34,8 @@ impl Actor for DbActor {
     type Context = SyncContext<Self>;
 }
 
+
+
+pub struct  AppState {
+    pub db: Addr<DbActor>
+}

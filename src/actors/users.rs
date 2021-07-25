@@ -1,13 +1,12 @@
 use actix::{Actor, Handler, Message, SyncContext};
 // use actix_derive::{Message, MessageResponse};
-use crate::db::index::DbActor;
+use crate::db::prelude::DbActor;
 use crate::diesel::prelude::*;
 use crate::helpers::hash::generate_hash;
-use crate::models::user::{NewUser, User, UserAuth, UserMessage, UserToken};
+use crate::models::users::{NewUser, User, UserAuth, UserMessage, UserToken};
 use crate::schema::{user_info, user_role};
 use actix::prelude::*;
 use uuid::Uuid;
-// pub struct DbActor(pub: db::PgPool);
 
 #[derive(Message)]
 #[rtype(result = "QueryResult<UserMessage>")]

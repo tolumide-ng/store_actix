@@ -3,9 +3,7 @@ use chrono;
 use serde::{Deserialize, Serialize};
 use uuid;
 
-pub struct AppState {}
 
-// impl
 
 #[derive(Queryable, Deserialize, Debug, Serialize, Clone)]
 pub struct User {
@@ -30,18 +28,27 @@ pub struct NewUser {
 
 #[derive(Serialize)]
 pub struct UserAuth {
-    first_name: String,
-    last_name: String,
-    email: String,
-    token: String,
+    pub first_name: String,
+    pub last_name: String,
+    pub email: String,
+    pub token: String,
 }
 
 #[derive(Serialize, Queryable, Deserialize, Debug)]
 pub struct UserToken<'a> {
-    token: &'a str,
+    pub token: &'a str,
 }
 
 #[derive(Serialize, Queryable, Deserialize, Debug)]
 pub struct UserMessage {
-    message: String,
+    pub message: String,
+}
+
+ 
+#[derive(Serialize, Deserialize)]
+pub struct UserData {
+    pub first_name: String,
+    pub last_name: String,
+    pub email: String,
+    pub password: String
 }

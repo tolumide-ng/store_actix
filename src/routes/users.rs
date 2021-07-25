@@ -1,8 +1,8 @@
-use crate::db::index;
+use crate::db::prelude::{PooledConn};
 use actix_web::{web, HttpRequest, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
 
-pub async fn register(data: web::Data<index::PooledConn>, req: HttpRequest) -> impl Responder {
+pub async fn register(data: web::Data<PooledConn>, req: HttpRequest) -> impl Responder {
     println!("THE SAID REQUEST >>>>>>>>>>><<<<<<<<<<");
     format!("Hello World")
     // let url = req.url_for("foo", &["1", "2", "3"]); // <- generate url for "foo" resource

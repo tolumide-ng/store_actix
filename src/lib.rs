@@ -1,5 +1,20 @@
-use crate::db::index::get_pool;
-use actix::prelude::{Addr, SyncArbiter};
+extern crate actix;
+
+#[macro_use]
+extern crate diesel;
+
+#[macro_use]
+extern crate serde_derive;
+
+#[macro_use]
+extern crate diesel_migrations;
+
+// extern crate jsonwebtoken as jwt;
+extern crate dotenv;
+
+
+use crate::db::prelude::get_pool;
+// use actix::prelude::{Addr, SyncArbiter};
 use actix_cors::Cors;
 use actix_web::{
     http::header::{AUTHORIZATION, CONTENT_TYPE},
@@ -10,27 +25,22 @@ use actix_web::{
 use dotenv::dotenv;
 use std::env;
 
-#[macro_use]
-extern crate diesel;
-#[macro_use]
-extern crate serde_derive;
-#[macro_use]
-extern crate diesel_migrations;
-
-// extern crate jsonwebtoken as jwt;
-extern crate dotenv;
 
 pub mod actors;
 pub mod db;
 pub mod errors;
 pub mod helpers;
-pub mod index;
 pub mod middlewares;
 pub mod models;
 pub mod routes;
 pub mod schema;
+pub mod controllers;
+pub mod l_actors;
 
 // use actix_web::{web, App, HttpRequest, HttpServer, Responder};
+
+// #[post("/register")]
+// async fn create_user() {}
 
 #[actix_web::main]
 pub async fn start() -> std::io::Result<()> {
@@ -59,7 +69,7 @@ pub async fn start() -> std::io::Result<()> {
                 .max_age(3600),
         };
 
-        App::new().data(db_pool.clone()).service(
+        App::new().service(
             web::scope("/api/v1").service(web::resource("/signup").to(routes::users::register)),
         )
     })
