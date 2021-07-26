@@ -1,6 +1,6 @@
 // use models::{}
 use actix_web::{get, post, web::{self, Data, Json}, Responder, HttpResponse};
-use crate::models::users::{UserData};
+use crate::validations::users::{UserData};
 use crate::db::prelude::AppState;
 use crate::helpers::hash::{generate_hash};
 use crate::actors::users::{CreateUser};

@@ -36,11 +36,8 @@ pub mod models;
 pub mod routes;
 pub mod schema;
 pub mod controllers;
+pub mod validations;
 
-// use actix_web::{web, App, HttpRequest, HttpServer, Responder};
-
-// #[post("/register")]
-// async fn create_user() {}
 
 #[actix_web::main]
 pub async fn start() -> std::io::Result<()> {
