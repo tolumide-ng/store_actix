@@ -34,7 +34,7 @@ pub struct UserAuth {
     pub first_name: String,
     pub last_name: String,
     pub email: String,
-    // pub token: String,
+    pub token: Option<String>,
 }
 
 #[derive(Serialize, Queryable, Deserialize, Debug)]

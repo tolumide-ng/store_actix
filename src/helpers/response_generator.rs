@@ -1,3 +1,5 @@
+
+
 use std::collections::HashMap;
 use actix_web::{HttpRequest, Responder};
 use serde::{Serialize, Deserialize};
@@ -30,9 +32,20 @@ pub struct SuccessResponse<T: ResponseTrait> {
     status_code: u32,
 }
 
-// impl<T> SuccessResponse<T> where T: ResponseTrait {
-//     pub fn new(status_code: u32, data: T) -> Self {
-//         SuccessResponse {status_code, data}
-//     }
-// }
 
+
+
+#[derive(Serialize)]
+pub struct ErrorResponse<'a> {
+    pub message: &'a str,
+    pub status: u32,
+}
+
+
+impl<'a> ErrorResponse<'a> {
+    pub fn new (status: u32, message: &'a str) -> Self {
+        ErrorResponse {
+            status, message
+        }
+    }
+}

@@ -1,6 +1,6 @@
 // use models::{}
 use actix_web::{get, post, web::{self, Data, Json}, Responder, HttpResponse};
-use crate::{models::users::UserMessage, validations::users::{UserData, UserLogin}};
+use crate::{helpers::response_generator::ErrorResponse, models::users::UserMessage, validations::users::{UserData, UserLogin}};
 use crate::db::prelude::AppState;
 use crate::helpers::hash::{LocalHasher};
 use crate::actors::users::{CreateUser};
@@ -20,14 +20,16 @@ async fn register(user: Json<UserData>, state: Data<AppState>) -> impl Responder
         Ok(user) => {
             match user {
                 Ok(_) => {
-                    let msg = UserMessage {message: String::from("Email already exists")};
+                    let msg = ErrorResponse::new(409, "Email already exists");
                     return HttpResponse::Conflict().json(msg)
                 }
-                Err(_e) => {}
+                _ => {}
             }
         }
         Err(_err) => {
-            return HttpResponse::InternalServerError().json(UserMessage::new(String::from("Internal Server Error, Please try again later")))
+            let msg = ErrorResponse::new(500, "Internal Server Error, Please try again later");
+
+            return HttpResponse::InternalServerError().json(msg)
         }
     }
 

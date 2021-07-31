@@ -25,7 +25,7 @@ pub struct LoginUser<'a> {
 }
 
 #[derive(Message)]
-#[rtype(result = "QueryResult<User>")]
+#[rtype(result = "QueryResult<UserAuth>")]
 pub struct VerifyEmail {
     pub email: String,
 }
@@ -70,7 +70,7 @@ impl<'a> Handler<CreateUser> for DbActor {
 impl Handler<VerifyEmail> for DbActor {
 
 
-    type Result = Result<User, diesel::result::Error>;
+    type Result = Result<UserAuth, diesel::result::Error>;
 
     fn handle(&mut self, msg: VerifyEmail, ctx: &mut Self::Context) -> Self::Result {
         use crate::schema::user_info::dsl::*;
@@ -85,11 +85,13 @@ impl Handler<VerifyEmail> for DbActor {
 
         let email_exist = user_info.filter(email.eq(msg.email)).first::<User>(&conn);
 
+        let the_user = UserAuth {email: "".to_string(), first_name: "".to_string(), last_name: "".to_string(), token: None};
+
         match email_exist {
             Ok(user) => {
                 println!("here {:#?}", user.email);
 
-                return Ok(user)
+                return Ok(the_user)
             },
             Err(e) => Err(e),
         }
