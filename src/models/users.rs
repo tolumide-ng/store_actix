@@ -29,12 +29,12 @@ pub struct NewUser {
     pub hash: String,
 }
 
-#[derive(Serialize, Queryable)]
+#[derive(Serialize, Queryable, Debug)]
 pub struct UserAuth {
     pub first_name: String,
     pub last_name: String,
     pub email: String,
-    pub token: String,
+    // pub token: String,
 }
 
 #[derive(Serialize, Queryable, Deserialize, Debug)]
@@ -50,6 +50,13 @@ pub struct UserEmail {
 #[derive(Serialize, Queryable, Deserialize, Debug)]
 pub struct UserMessage {
     pub message: String,
+}
+
+
+impl UserMessage {
+    pub fn new(message: String)  -> Self{
+        return UserMessage {message}
+    }
 }
 
 
