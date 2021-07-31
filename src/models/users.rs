@@ -18,6 +18,8 @@ pub struct User {
     pub updated_at: chrono::DateTime<chrono::Utc>,
 }
 
+
+
 #[derive(Insertable, Serialize, Deserialize, Clone, Debug)]
 #[table_name = "user_info"]
 pub struct NewUser {
@@ -38,6 +40,11 @@ pub struct UserAuth {
 #[derive(Serialize, Queryable, Deserialize, Debug)]
 pub struct UserToken<'a> {
     pub token: &'a str,
+}
+
+#[derive(Queryable, Debug)]
+pub struct UserEmail {
+    email: String
 }
 
 #[derive(Serialize, Queryable, Deserialize, Debug)]

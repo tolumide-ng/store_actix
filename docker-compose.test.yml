@@ -28,7 +28,7 @@ services:
       - pgdata:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ${PG_USER}
-      # POSTGRES_PASSWORD: ${PG_PWD}
+      POSTGRES_PASSWORD: ${PG_PWD}
       PASSWORD: ${PWD}
     networks:
       - store_auth_test

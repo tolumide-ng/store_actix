@@ -13,3 +13,11 @@ pub struct UserData {
 }
 
 fn validate_password(password: String) {}
+
+
+#[derive(Serialize, Deserialize, Debug, Validate)]
+pub struct UserLogin {
+    #[validate(email(message="Please provide a valid email"))]
+    pub email: String,
+    pub password: String,
+}

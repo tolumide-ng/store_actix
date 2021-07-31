@@ -46,9 +46,20 @@ pub async fn start() -> std::io::Result<()> {
     dotenv().ok();
 
 
-    // let database_address = SyncArbiter::start(num_cpus::get(), move || DbActor(database_pool.clone()));
+    // CONFIRM IF ALL REQUIRED ENVIRONMENT VARIABLES ARE PROVIDED
+    let expected_variables = ["DATABASE_URL", "STORE_NAME", "SMTP_USERNAME", "SMTP_PASSWORD"];
 
-    let db_url = env::var("DATABASE_URL").expect("db_url is required");
+    expected_variables.iter().for_each(|variable| {
+        let error = format!("Environment Variable {} is required", variable);
+        env::var(variable).expect(error.as_str());
+    });
+
+
+
+    let db_url = env::var("DATABASE_URL").expect("DATABASE_URL is required");
+
+
+
     run_migrations(&db_url);
     // let pool = get_pool(db_url).expect("msg");
 
