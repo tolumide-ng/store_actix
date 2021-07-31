@@ -1,9 +1,12 @@
 // use models::{}
 use actix_web::{get, post, web::{self, Data, Json}, Responder, HttpResponse};
-use crate::validations::users::{UserData, UserLogin};
+use crate::{models::users::UserMessage, validations::users::{UserData, UserLogin}};
 use crate::db::prelude::AppState;
 use crate::helpers::hash::{LocalHasher};
 use crate::actors::users::{CreateUser};
+use crate::actors::users::{VerifyEmail};
+
+
 
 
 #[post("/register")]
@@ -14,7 +17,12 @@ async fn register(user: Json<UserData>, state: Data<AppState>) -> impl Responder
 
     let UserData {first_name, last_name, email, password} = user;
 
-    // let user_exist = 
+    if db.send(VerifyEmail {email: email.clone()}).await.is_ok() {
+        let msg = UserMessage {message: String::from("Email already exists")};
+
+        return HttpResponse::Conflict().json(msg)
+    }
+
 
     let local_hash = LocalHasher {password: password.as_str()};
     
@@ -34,11 +42,6 @@ async fn login(user: Json<UserLogin>, state: Data<AppState>) -> impl Responder {
     let db = state.as_ref().db.clone();
     let user = user.into_inner();
 
-
-    //         let not_found = users
-//     .filter(name.eq("Foo"))
-//     .first::<(i32, String)>(&connection);
-// assert_eq!(Err(diesel::NotFound), not_found);
 
     let UserLogin { email, password } = user;
 

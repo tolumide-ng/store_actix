@@ -36,7 +36,7 @@ pub struct ResetPassword<'a> {
     pub password: &'a str,
 }
 
-impl Handler<CreateUser> for DbActor {
+impl<'a> Handler<CreateUser> for DbActor {
     type Result = QueryResult<UserMessage>;
     
     fn handle(&mut self, msg: CreateUser, ctx: &mut Self::Context) -> Self::Result {
