@@ -20,6 +20,8 @@ async fn register(user: Json<UserData>, state: Data<AppState>) -> impl Responder
     
     // let hash = generate_hash(password.as_str());
     let hash = local_hash.generate_hash();
+
+    
     
     match db.send(CreateUser {first_name, last_name, email,  hash}).await {
         Ok(Ok(message)) => HttpResponse::Ok().json(message),
@@ -31,6 +33,12 @@ async fn register(user: Json<UserData>, state: Data<AppState>) -> impl Responder
 async fn login(user: Json<UserLogin>, state: Data<AppState>) -> impl Responder {
     let db = state.as_ref().db.clone();
     let user = user.into_inner();
+
+
+    //         let not_found = users
+//     .filter(name.eq("Foo"))
+//     .first::<(i32, String)>(&connection);
+// assert_eq!(Err(diesel::NotFound), not_found);
 
     let UserLogin { email, password } = user;
 

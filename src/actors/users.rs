@@ -50,8 +50,6 @@ impl Handler<CreateUser> for DbActor {
             panic!("Error getting connection, please try later")
         };
 
-
-        // let create_user = diesel::insert_into(user_info).values(new_user).execute(&conn);
         let create_user = diesel::insert_into(user_info).values(new_user).get_result::<User>(&conn);
 
 
