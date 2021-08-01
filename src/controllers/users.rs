@@ -37,7 +37,7 @@ async fn register(user: Json<UserData>, state: Data<AppState>) -> impl Responder
     let hash = LocalHasher::generate_hash(&password);
     
     match db.send(CreateUser {first_name, last_name, email,  hash}).await {
-        Ok(Ok(message)) => HttpResponse::Ok().json(message),
+        Ok(Ok(message)) => HttpResponse::Created().json(message),
         _ => return HttpResponse::InternalServerError().json(ErrorResponse::server_error())
     }
 }
