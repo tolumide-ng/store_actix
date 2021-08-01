@@ -9,6 +9,10 @@ pub struct LocalHasher<'a> {
 }
 
 impl<'a> LocalHasher<'a> {
+    pub fn new(password: &'a str) -> Self {
+        Self {password}
+    }
+
     // this should be refactored to allow dependency injection such that the method of hash is chosen by the caller
     pub fn generate_hash(&self) -> String {
         let pass = self.password.as_bytes();

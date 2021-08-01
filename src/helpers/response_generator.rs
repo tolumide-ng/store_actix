@@ -36,16 +36,34 @@ pub struct SuccessResponse<T: ResponseTrait> {
 
 
 #[derive(Serialize)]
-pub struct ErrorResponse<'a> {
-    pub message: &'a str,
+pub struct ErrorResponse {
+    pub message: String,
     pub status: u32,
 }
 
 
-impl<'a> ErrorResponse<'a> {
-    pub fn new (status: u32, message: &'a str) -> Self {
+impl ErrorResponse {
+    pub fn new (status: u32, message: String) -> Self {
         ErrorResponse {
             status, message
         }
+    }
+
+    pub fn server_error() -> Self {
+        ErrorResponse::new(500, "Internal Server Error, Please try again later".to_owned())
+    }
+
+
+    pub fn auth_error<'a>(error_text: Option<&'a str>) -> Self {
+        let mut msg = String::from("Authentication Error");
+
+        match error_text {
+            Some(text) => {
+                msg.push_str(text);
+            }
+            None => {}
+        }
+
+        return ErrorResponse::new(401,  msg);
     }
 }

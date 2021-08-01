@@ -85,9 +85,12 @@ pub async fn start() -> std::io::Result<()> {
         //     web::scope("/api/v1").service(web::resource("/signup").to(routes::users::register)),
         // )
 
-        App::new().service(controllers::users::register).data(AppState {
-            db: db_addr.clone()
-        })
+        App::new()
+            .service(controllers::users::register)
+            .service(controllers::users::login)
+            .data(AppState {
+                db: db_addr.clone()
+            })
     })
     .bind(("127.0.0.1", 8080))?
     .run()
