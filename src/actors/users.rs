@@ -85,8 +85,6 @@ impl Handler<VerifyEmail> for DbActor {
 
         let email_exist = user_info.filter(email.eq(msg.email)).first::<User>(&conn);
 
-        // let the_user = UserAuth {email: "".to_string(), first_name: "".to_string(), last_name: "".to_string(), token: None};
-
         match email_exist {
             Ok(user) => Ok(user),
             Err(e) => Err(e),

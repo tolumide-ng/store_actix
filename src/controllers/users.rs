@@ -1,11 +1,12 @@
 // use models::{}
 use actix_web::{get, post, web::{self, Data, Json}, Responder, HttpResponse};
-use crate::{helpers::response_generator::ErrorResponse, models::users::UserMessage, validations::users::{UserData, UserLogin}};
+use crate::{helpers::response_generator::ErrorResponse, models::users::{UserAuth, UserMessage}, validations::users::{UserData, UserLogin}};
 use crate::db::prelude::AppState;
 use crate::helpers::hash::{LocalHasher};
 use crate::actors::users::{CreateUser};
 use crate::actors::users::{VerifyEmail};
 use crate::helpers::token;
+use crate::models::users::{User};
 
 
 
@@ -50,11 +51,26 @@ async fn login(user: Json<UserLogin>, state: Data<AppState>) -> impl Responder {
 
     let UserLogin {email, password} = user;
 
+    //  PLEASE REFACTOR THIS MATCH HELL
     match db.send(VerifyEmail {email: email}).await {
         Ok(user) => {
             match user {
                 Ok(the_user) => {
-                    if !LocalHasher::verify_hash(the_user.hash, password) {
+
+                    let User {first_name, last_name, email, hash, .. } = the_user;
+
+
+                    if LocalHasher::verify_hash(hash, password) {
+                        let user_token = token::UserToken::generate_token(email.to_owned(), 40, "store_recs".to_string());
+
+                        match user_token {
+                            Ok(token) => {
+                                return HttpResponse::Ok().json(UserAuth::new(first_name, last_name, email, token))
+                            }
+                            Err(_e) => {}
+                        }
+
+                    } else {
                         return HttpResponse::Unauthorized().json(ErrorResponse::auth_error(Some(": Email or Password is incorrect")))
                     }
                 }
@@ -74,7 +90,6 @@ async fn login(user: Json<UserLogin>, state: Data<AppState>) -> impl Responder {
 
     // let hash_helper = LocalHasher {password};
     // String::from("welcome to login page")
-    // let token = token::UserToken::generate_token(sub, time, company);
 
 
     let msg = UserMessage {message: "This is a placeholder text".to_string()};

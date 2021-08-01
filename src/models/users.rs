@@ -34,7 +34,7 @@ pub struct UserAuth {
     pub first_name: String,
     pub last_name: String,
     pub email: String,
-    pub token: Option<String>,
+    pub token: String,
 }
 
 #[derive(Serialize, Queryable, Deserialize, Debug)]
@@ -69,5 +69,13 @@ impl NewUser {
             last_name: user.last_name,
             email: user.email
         }
+    }
+}
+
+
+
+impl UserAuth {
+    pub fn new(first_name: String, last_name: String, email: String, token: String) -> Self {
+        UserAuth {first_name, last_name, email, token}
     }
 }
