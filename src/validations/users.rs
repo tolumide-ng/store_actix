@@ -12,6 +12,8 @@ pub struct UserData {
     pub password: String
 }
 
+// TODOS 
+//  - Learn Rust regex syntax to write password validation regex here
 fn validate_password(password: String) {}
 
 
@@ -21,3 +23,11 @@ pub struct UserLogin {
     pub email: String,
     pub password: String,
 }
+
+
+#[derive(Serialize, Deserialize, Debug, Validate)]
+pub struct UserEmail {
+    #[validate(email(message="Please provide a valid email"))]
+    pub email: String,
+}
+

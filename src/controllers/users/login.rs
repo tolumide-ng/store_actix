@@ -1,7 +1,9 @@
 use crate::controllers::prelude::*;
 
 
-
+// TODOS:
+//  - Implement with redis to save all issued tokens
+//  - Log all failed and successful login requests
 #[post("/login")]
 async fn controller(user: Json<UserLogin>, state: Data<AppState>) -> impl Responder {
     let db = state.as_ref().db.clone();

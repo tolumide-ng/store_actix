@@ -25,8 +25,10 @@ impl ResponseBody {
 
 
 #[derive(Serialize)]
-pub struct SuccessResponse<T: ResponseTrait> {
-    data: T,
+pub struct SuccessResponse {
+    // data: Box<dyn ResponseTrait>,
+    // IMplement serializer, and deserializer for this 
+    // check out serde's documentation on how to implement serializer and deserializer for structs
     status_code: u32,
 }
 
@@ -65,3 +67,5 @@ impl ErrorResponse {
         return ErrorResponse::new(401,  msg);
     }
 }
+
+

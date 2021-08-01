@@ -88,6 +88,7 @@ pub async fn start() -> std::io::Result<()> {
         App::new()
             .service(controllers::users::register::controller)
             .service(controllers::users::login::controller)
+            .service(controllers::users::forgot_password::controller)
             .data(AppState {
                 db: db_addr.clone()
             })

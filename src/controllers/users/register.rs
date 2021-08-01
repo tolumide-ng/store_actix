@@ -1,6 +1,9 @@
 use crate::controllers::prelude::*;
 
 
+// TODO
+//  - Send a real email to the user on signup
+
 #[post("/register")]
 async fn controller(user: Json<UserData>, state: Data<AppState>) -> impl Responder {
     let db = state.as_ref().db.clone();
