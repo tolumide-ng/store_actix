@@ -4,18 +4,12 @@ use pbkdf2::{
 };
 use rand_core::OsRng;
 
-pub struct LocalHasher<'a> {
-    pub password: &'a str
-}
+pub struct LocalHasher;
 
-impl<'a> LocalHasher<'a> {
-    pub fn new(password: &'a str) -> Self {
-        Self {password}
-    }
-
+impl LocalHasher {
     // this should be refactored to allow dependency injection such that the method of hash is chosen by the caller
-    pub fn generate_hash(&self) -> String {
-        let pass = self.password.as_bytes();
+    pub fn generate_hash<'a>(password: &'a str) -> String {
+        let pass = password.as_bytes();
 
         let salt = SaltString::generate(&mut OsRng);
 
@@ -26,9 +20,9 @@ impl<'a> LocalHasher<'a> {
     }
 
     // this should be refactored to allow dependency injection such that the method of hash is chosen by the caller
-    pub fn verify_hash(&self, hash: String) -> bool {
-        let parsed_hash = PasswordHash::new(&hash).unwrap();
-        let pass = &self.password.as_bytes();
+    pub fn verify_hash(hashed_password: String, password: String) -> bool {
+        let parsed_hash = PasswordHash::new(hashed_password.as_str()).unwrap();
+        let pass = password.as_bytes();
 
         Pbkdf2.verify_password(pass, &parsed_hash).is_ok()
     }

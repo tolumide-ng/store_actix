@@ -5,6 +5,7 @@ use crate::db::prelude::AppState;
 use crate::helpers::hash::{LocalHasher};
 use crate::actors::users::{CreateUser};
 use crate::actors::users::{VerifyEmail};
+use crate::helpers::token;
 
 
 
@@ -32,9 +33,7 @@ async fn register(user: Json<UserData>, state: Data<AppState>) -> impl Responder
     }
 
 
-    let local_hash = LocalHasher::new(password.as_str());
-
-    let hash = local_hash.generate_hash();
+    let hash = LocalHasher::generate_hash(&password);
     
     match db.send(CreateUser {first_name, last_name, email,  hash}).await {
         Ok(Ok(message)) => HttpResponse::Ok().json(message),
@@ -55,8 +54,7 @@ async fn login(user: Json<UserLogin>, state: Data<AppState>) -> impl Responder {
         Ok(user) => {
             match user {
                 Ok(the_user) => {
-                    let password = LocalHasher::new(password.as_str());
-                    if !password.verify_hash(the_user.hash) {
+                    if !LocalHasher::verify_hash(the_user.hash, password) {
                         return HttpResponse::Unauthorized().json(ErrorResponse::auth_error(Some(": Email or Password is incorrect")))
                     }
                 }
@@ -69,12 +67,16 @@ async fn login(user: Json<UserLogin>, state: Data<AppState>) -> impl Responder {
             return HttpResponse::InternalServerError().json(ErrorResponse::server_error())
         }
     }
+
     
 
     // let UserLogin { email, password } = user;
 
     // let hash_helper = LocalHasher {password};
     // String::from("welcome to login page")
+    // let token = token::UserToken::generate_token(sub, time, company);
+
+
     let msg = UserMessage {message: "This is a placeholder text".to_string()};
     HttpResponse::Ok().json(msg)
 }
