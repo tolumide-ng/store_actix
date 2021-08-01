@@ -70,6 +70,7 @@ impl<'a> Handler<CreateUser> for DbActor {
 impl Handler<VerifyEmail> for DbActor {
 
 
+    // type Result = QueryResult<User>;
     type Result = Result<User, diesel::result::Error>;
 
     fn handle(&mut self, msg: VerifyEmail, ctx: &mut Self::Context) -> Self::Result {
@@ -85,7 +86,7 @@ impl Handler<VerifyEmail> for DbActor {
 
         let email_exist = user_info.filter(email.eq(msg.email)).first::<User>(&conn);
 
-        match email_exist {
+        return match email_exist {
             Ok(user) => Ok(user),
             Err(e) => Err(e),
         }

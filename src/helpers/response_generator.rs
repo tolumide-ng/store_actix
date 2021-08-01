@@ -1,6 +1,4 @@
 
-
-use std::collections::HashMap;
 use actix_web::{HttpRequest, Responder};
 use serde::{Serialize, Deserialize};
 

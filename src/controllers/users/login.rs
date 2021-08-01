@@ -1,48 +1,51 @@
 use crate::controllers::prelude::*;
 
 
+
 #[post("/login")]
 async fn controller(user: Json<UserLogin>, state: Data<AppState>) -> impl Responder {
     let db = state.as_ref().db.clone();
     let user = user.into_inner();
 
+    
     let UserLogin {email, password} = user;
+    
+    let verify_email = db.send(VerifyEmail {email}).await;
+    
+    
+    if verify_email.is_err() {
+        // executes if there was a server error in checking the request
+        return HttpResponse::InternalServerError().json(ErrorResponse::server_error())
+    }
+    
+    let user = verify_email.unwrap();
 
-    //  PLEASE REFACTOR THIS MATCH HELL
-    match db.send(VerifyEmail {email: email}).await {
-        Ok(user) => {
-            match user {
-                Ok(the_user) => {
+    let bad_auth = HttpResponse::Unauthorized().json(ErrorResponse::auth_error(Some(": Email or Password is incorrect")));
 
-                    let User {first_name, last_name, email, hash, .. } = the_user;
+    if user.is_err() {
+        return bad_auth
+    }
 
+    let the_user = user.unwrap();
 
-                    if LocalHasher::verify_hash(hash, password) {
-                        let user_token = token::UserToken::generate_token(email.to_owned(), 40, "store_recs".to_string());
+    let User {first_name, last_name, email, hash, .. } = the_user;
 
-                        match user_token {
-                            Ok(token) => {
-                                return HttpResponse::Ok().json(UserAuth::new(first_name, last_name, email, token))
-                            }
-                            Err(_e) => {}
-                        }
+    let correct_password = LocalHasher::verify_hash(hash, password);
 
-                    } else {
-                        return HttpResponse::Unauthorized().json(ErrorResponse::auth_error(Some(": Email or Password is incorrect")))
-                    }
-                }
-                _ => {
-                    return HttpResponse::Unauthorized().json(ErrorResponse::auth_error(Some(": Email or Password is incorrect")))
-                }
-            }
-        }
-        _ => {
-            return HttpResponse::InternalServerError().json(ErrorResponse::server_error())
-        }
+    if !correct_password {
+        return bad_auth
     }
 
 
+    // generate token for the user
+    let token = token::UserToken::generate_token(email.to_owned(), 40, "store_recs".to_string());
 
-    let msg = UserMessage {message: "This is a placeholder text".to_string()};
-    HttpResponse::Ok().json(msg)
+    if token.is_err() {
+        return bad_auth
+    }
+
+    let the_token = token.unwrap();
+
+    return HttpResponse::Ok().json(UserAuth::new(first_name, last_name, email, the_token))
+
 }
