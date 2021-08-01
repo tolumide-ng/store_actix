@@ -9,7 +9,7 @@ edition = "2018"
 serde_json = "1.0.64"
 num_cpus = "1.11.1"
 serde_derive = "1"
-serde = "1"
+serde = {version = "1.0", features = ["derive"] }
 actix = "0.10.0"
 actix-web = "3.3.2"
 actix-cors = "0.5.4"
@@ -23,3 +23,4 @@ pbkdf2 = "0.7"
 rand_core = { version = "0.6", features = ["std"] }
 validator = { version = "0.14.0", features = ["derive"]}
 lettre = "0.10.0-rc.3"
+jsonwebtoken = "7.2.0"

@@ -47,7 +47,7 @@ pub async fn start() -> std::io::Result<()> {
 
 
     // CONFIRM IF ALL REQUIRED ENVIRONMENT VARIABLES ARE PROVIDED
-    let expected_variables = ["DATABASE_URL", "STORE_NAME", "SMTP_USERNAME", "SMTP_PASSWORD"];
+    let expected_variables = ["DATABASE_URL", "STORE_NAME", "SMTP_USERNAME", "SMTP_PASSWORD", "JWT_SECRET"];
 
     expected_variables.iter().for_each(|variable| {
         let error = format!("Environment Variable {} is required", variable);

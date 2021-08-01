@@ -57,11 +57,11 @@ async fn login(user: Json<UserLogin>, state: Data<AppState>) -> impl Responder {
                 Ok(the_user) => {
                     let password = LocalHasher::new(password.as_str());
                     if !password.verify_hash(the_user.hash) {
-                        return HttpResponse::Unauthorized().json(ErrorResponse::auth_error(Some("Email or Password is incorrect")))
+                        return HttpResponse::Unauthorized().json(ErrorResponse::auth_error(Some(": Email or Password is incorrect")))
                     }
                 }
                 _ => {
-                    return HttpResponse::Unauthorized().json(ErrorResponse::auth_error(Some("Email or Password is incorrect")))
+                    return HttpResponse::Unauthorized().json(ErrorResponse::auth_error(Some(": Email or Password is incorrect")))
                 }
             }
         }
